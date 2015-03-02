@@ -1,0 +1,13 @@
+{
+    "name": "complex/collection-stream",
+    "authors": [
+        {
+            "name": "Steven Inskip",
+            "email": "inskips@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"Complex\\": "src/Complex"}
+    }
+}
