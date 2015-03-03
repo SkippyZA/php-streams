@@ -19,15 +19,49 @@ class Main {
     }
 
     public function run() {
-        echo "::range(1, 10)\n";
-        Stream::range(1, 10)->test();
+        $println = function ($s) {
+            echo $s . "\n";
+        };
 
-        echo "\n::from(\$this->exampleCollection)\n";
-        Stream::from($this->exampleCollection)->test();
+        echo "Even numbers between 1 and 10:\n";
+        Stream::range(1, 10)
+            ->filter(function($i) {
+                return ($i % 2 == 0);
+            })
+            ->map(function ($i) {
+                return "Even " . $i;
+            })
+            ->each($println);
 
-        echo "\n::from(new RangeStream(1, 10))\n";
-        Stream::from(new \Complex\CollectionStream\Stream\RangeStream(1, 10))->test();
+        echo "\nTest for inclusive range 1 to 3:\n";
+        Stream::range(1, 3)
+            ->each($println);
 
+        echo "\nMale persons from example collection:\n";
+        Stream::from($this->exampleCollection)
+            ->filter(function(Person $person) {
+                return ($person->getSex() == Person::MALE);
+            })
+            ->each($println);
+
+        echo "\nLimit 3 of a range between 10 and 15:\n";
+        Stream::range(10, 15)
+            ->limit(3)
+            ->each($println);
+
+        echo "\nLazy test: \n";
+        Stream::from(array("d2", "a2", "b1", "b3", "c"))
+            ->filter(function($s) {
+                echo "filter: " . $s . "\n";
+                return (substr($s, 0, 1) === "a");
+            })
+            ->map(function($s) {
+                echo "map: " . $s . "\n";
+                return strtoupper($s);
+            })
+            ->each(function($s) {
+                echo "each: " . $s . "\n";
+            });
     }
 }
 

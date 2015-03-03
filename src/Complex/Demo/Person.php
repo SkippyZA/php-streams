@@ -2,7 +2,8 @@
 namespace Complex\Demo;
 
 
-class Person {
+class Person
+{
     const MALE = "male";
     const FEMALE = "female";
 
@@ -14,7 +15,7 @@ class Person {
     /**
      * @param string $firstName
      * @param string $surname
-     * @param int $age
+     * @param int    $age
      * @param string $sex
      */
     function __construct($firstName, $surname, $age, $sex)
@@ -26,11 +27,11 @@ class Person {
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getAge()
+    public function getFullname()
     {
-        return $this->age;
+        return $this->getFirstName() . " " . $this->getSurname();
     }
 
     /**
@@ -49,23 +50,26 @@ class Person {
         return $this->surname;
     }
 
+    function __toString()
+    {
+        return $this->getFirstName() . " " . $this->getSurname() . ", Age: " . $this->getAge() . ", Sex: "
+        . $this->getSex();
+    }
+
+    /**
+     * @return int
+     */
+    public function getAge()
+    {
+        return $this->age;
+    }
+
     /**
      * @return string
      */
     public function getSex()
     {
         return $this->sex;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFullname() {
-        return $this->getFirstName() . " " . $this->getSurname();
-    }
-
-    function __toString() {
-        return $this->getFirstName() . " " . $this->getSurname() . ", Age: " . $this->getAge() . ", Sex: " . $this->getSex();
     }
 
 

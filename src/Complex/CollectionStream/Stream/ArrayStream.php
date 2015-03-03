@@ -2,11 +2,10 @@
 
 namespace Complex\CollectionStream\Stream;
 
-
 class ArrayStream implements \Iterator
 {
     private $collection;
-    private $index = 0;
+    private $index;
 
     public function __construct($collection)
     {
@@ -15,6 +14,7 @@ class ArrayStream implements \Iterator
 
     /**
      * Return the current element
+     *
      * @return mixed Can return any type.
      */
     public function current()
@@ -24,29 +24,38 @@ class ArrayStream implements \Iterator
 
     /**
      * Move forward to next element
+     *
      * @return void Any returned value is ignored.
      */
     public function next()
     {
-        ++$this->index;
+        if ($this->index === null) {
+            $this->index = 0;
+        } else {
+            $this->index++;
+        }
     }
 
 
     /**
      * Return the key of the current element
+     *
      * @return mixed scalar on success, or null on failure.
      */
     public function key()
     {
-        if (isset($this->collection[$this->index]))
+        if (isset($this->collection[$this->index])) {
             return $this->index;
+        }
 
         return null;
     }
 
     /**
      * Checks if current position is valid
-     * @return boolean The return value will be casted to boolean and then evaluated.
+     *
+     * @return boolean The return value will be casted to boolean and then
+     *                 evaluated.
      * Returns true on success or false on failure.
      */
     public function valid()
@@ -57,6 +66,7 @@ class ArrayStream implements \Iterator
 
     /**
      * Rewind the Iterator to the first element
+     *
      * @return void Any returned value is ignored.
      */
     public function rewind()

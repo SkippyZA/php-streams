@@ -2,53 +2,41 @@
 
 namespace Complex\CollectionStream;
 
-use Complex\CollectionStream\Stream\ArrayStream;
 use Complex\CollectionStream\Stream\RangeStream;
-use Iterator;
 use Exception;
 
-class Stream {
-    /**
-     * @var Iterator
-     */
-    private $collection;
-
-
+class Stream
+{
     /**
      * @param $collection
+     *
      * @throws Exception
      */
-    function __construct($collection) {
-        if($collection instanceof Iterator) {
-            $this->collection = $collection;
+    private function __construct($collection)
+    {
 
-        } elseif(is_array($collection)) {
-            $this->collection = new ArrayStream($collection);
-        } else {
-            throw new Exception("Invalid constructor argument. Must be an array or implement the Iterator interface");
-        }
     }
 
     /**
      * @param $collection
-     * @return Stream
+     *
+     * @return OperationPipe
      */
-    public static function from($collection) {
-        return new Stream($collection);
+    public static function from($collection)
+    {
+        return new OperationPipe($collection);
     }
 
     /**
      * @param int $start Start inclusive
-     * @param int $end End inclusive
-     * @return Stream
+     * @param int $end   End inclusive
+     *
+     * @return OperationPipe
      */
-    public static function range($start, $end) {
-        return new Stream(new RangeStream($start, $end));
+    public static function range($start, $end)
+    {
+        return new OperationPipe(new RangeStream($start, $end));
     }
 
-    public function test() {
-        foreach($this->collection as $value) {
-            echo $value . "\n";
-        }
-    }
+
 }
