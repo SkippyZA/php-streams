@@ -3,7 +3,7 @@
 require '../vendor/autoload.php';
 
 use Complex\Demo\Person;
-use Complex\CollectionStream\CollectionStream;
+use Complex\CollectionStream\Stream;
 
 class Main {
     private $exampleCollection;
@@ -19,61 +19,15 @@ class Main {
     }
 
     public function run() {
-        $greaterThan26 = function (Person $p) {
-            return ($p->getAge() > 26);
-        };
+        echo "::range(1, 10)\n";
+        Stream::range(1, 10)->test();
 
-        $agePersonBy10 = function (Person $p) {
-            return new Person($p->getFirstName(), $p->getSurname(), $p->getAge() + 10, $p->getSex());
-        };
+        echo "\n::from(\$this->exampleCollection)\n";
+        Stream::from($this->exampleCollection)->test();
 
-        $println = function ($o) {
-            echo $o . "\n";
-        };
+        echo "\n::from(new RangeStream(1, 10))\n";
+        Stream::from(new \Complex\CollectionStream\Stream\RangeStream(1, 10))->test();
 
-        $sortByAgeAsc = function (Person $a, Person $b) {
-            return ($a->getAge() > $b->getAge());
-        };
-
-        $sortByAgeDesc = function (Person $a, Person $b) {
-            return ($a->getAge() < $b->getAge());
-        };
-
-        $isMale = function(Person $p) {
-            return $p->getSex() === Person::MALE;
-        };
-
-        $isFemale = function(Person $p) {
-            return $p->getSex() === Person::FEMALE;
-        };
-
-        $sumAge = function ($c, Person $p) {
-            $c += $p->getAge();
-            return $c;
-        };
-
-        echo "List of people ordered by age:\n";
-        echo "------------------------------\n";
-        CollectionStream::from($this->exampleCollection)
-            ->sort($sortByAgeAsc)
-            ->each($println);
-
-        echo "\nAge of men in 10 years above 26:\n";
-        echo   "--------------------------------\n";
-        CollectionStream::from($this->exampleCollection)
-            ->map($agePersonBy10)
-            ->filter($greaterThan26)
-            ->filter($isMale)
-            ->sort($sortByAgeAsc)
-            ->reduce($sumAge)
-            ->single($println);
-
-        echo "\nTesting single process\n";
-        echo   "----------------------\n";
-        CollectionStream::from($this->exampleCollection)
-            ->map($agePersonBy10)
-            ->sort($sortByAgeDesc)
-            ->single($println);
     }
 }
 
