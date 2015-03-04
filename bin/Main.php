@@ -66,6 +66,11 @@ class Main {
             ->each(function($s) {
                 echo "each: " . $s . "\n";
             });
+
+        echo "\nArray test\n";
+        $arr = Stream::from(array("d2", "a2", "b1", "b3", "c"))->toArray();
+        var_dump($arr);
+
     }
 }
 

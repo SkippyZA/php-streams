@@ -82,6 +82,17 @@ class OperationPipe
         while (($current = $this->next()) !== null) {
             call_user_func_array($function, array($current));
         }
+    }
 
+    public function toArray()
+    {
+        $current = null;
+        $streamValueArray = [];
+
+        while (($current = $this->next()) !== null) {
+            $streamValueArray[] = $current;
+        }
+
+        return $streamValueArray;
     }
 } 
