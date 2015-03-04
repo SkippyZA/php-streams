@@ -96,7 +96,7 @@ class RangeStream implements Iterator
      */
     private function isPositiveRange()
     {
-        return $this->begin >= $this->end;
+        return $this->begin <= $this->end;
     }
 
 } 
