@@ -25,7 +25,7 @@ class RangeStream implements Iterator
     {
         if ($this->current === null) {
             $this->current = $this->begin;
-        } else if ($this->begin <= $this->end) {
+        } else if ($this->isPositiveRange()) {
             $this->current++;
         } else {
             $this->current--;
@@ -64,7 +64,7 @@ class RangeStream implements Iterator
      */
     public function valid()
     {
-        if ($this->begin <= $this->end) {
+        if ($this->isPositiveRange()) {
             // positive direction range validity
             if ($this->current >= $this->begin && $this->current <= $this->end) {
                 return true;
@@ -87,6 +87,16 @@ class RangeStream implements Iterator
     public function rewind()
     {
         $this->current = $this->begin;
+    }
+
+    /**
+     * Tests the range parameters for positive direction increments
+     *
+     * @return boolean Will be true for positive range, false for negative
+     */
+    private function isPositiveRange()
+    {
+        return $this->begin >= $this->end;
     }
 
 } 

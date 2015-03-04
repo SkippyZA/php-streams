@@ -2,7 +2,9 @@
 
 namespace Complex\CollectionStream\Stream;
 
-class ArrayStream implements \Iterator
+use Iterator;
+
+class ArrayStream implements Iterator
 {
     private $collection;
     private $index;
