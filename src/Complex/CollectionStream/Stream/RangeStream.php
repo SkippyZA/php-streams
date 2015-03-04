@@ -25,8 +25,10 @@ class RangeStream implements Iterator
     {
         if ($this->current === null) {
             $this->current = $this->begin;
-        } else {
+        } else if ($this->begin <= $this->end) {
             $this->current++;
+        } else {
+            $this->current--;
         }
     }
 
@@ -62,8 +64,16 @@ class RangeStream implements Iterator
      */
     public function valid()
     {
-        if ($this->current >= $this->begin && $this->current <= $this->end) {
-            return true;
+        if ($this->begin <= $this->end) {
+            // positive direction range validity
+            if ($this->current >= $this->begin && $this->current <= $this->end) {
+                return true;
+            }
+        } else {
+            // negative direction range validity
+            if ($this->current <= $this->begin && $this->current >= $this->end) {
+                return true;
+            }
         }
 
         return false;

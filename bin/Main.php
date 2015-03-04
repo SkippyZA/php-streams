@@ -37,6 +37,10 @@ class Main {
         Stream::range(1, 3)
             ->each($println);
 
+        echo "\nTest for inclusive range 5 to 1:\n";
+        Stream::range(5, 1)
+            ->each($println);
+
         echo "\nMale persons from example collection:\n";
         Stream::from($this->exampleCollection)
             ->filter(function(Person $person) {
