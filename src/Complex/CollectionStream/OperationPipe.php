@@ -95,4 +95,9 @@ class OperationPipe
 
         return $streamValueArray;
     }
+
+    public function first()
+    {
+        return $this->next();
+    }
 } 

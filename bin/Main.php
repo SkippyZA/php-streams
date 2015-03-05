@@ -66,6 +66,13 @@ class Main {
             ->each(function($s) {
                 echo "each: " . $s . "\n";
             });
+
+        echo "\nFirst even number between 1 and 10: ";
+        echo Stream::range(1, 10)
+            ->filter(function($i) {
+                return ($i % 2 == 0);
+            })
+            ->first();
     }
 }
 
