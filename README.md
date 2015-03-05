@@ -16,5 +16,5 @@ sudo mv phpunit.phar /usr/local/bin/phpunit
 Navigate to the project directory and run:
 
 ```sh
-phpunit --bootstrap vendor/autoload.php Tests/
+phpunit --bootstrap vendor/autoload.php tests/
 ```
