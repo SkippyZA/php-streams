@@ -73,4 +73,14 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($result->isPresent());
         $this->assertEquals(1, $result->get());
     }
+
+    public function testFirstWithoutValue() {
+        $result = Stream::from($this->data)
+            ->filter(function($i) {
+                return false;
+            })
+            ->first();
+
+        $this->assertFalse($result->isPresent());
+    }
 }

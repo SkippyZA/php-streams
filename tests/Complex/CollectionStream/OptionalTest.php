@@ -93,7 +93,7 @@ class OptionalTest extends \PHPUnit_Framework_TestCase {
 
         $opt = Optional::ofEmpty();
         $this->assertFalse($opt->isPresent());
-        $result = $opt->orElseThrow(new Exception());
+        $opt->orElseThrow(new Exception());
     }
 
     public function testOrElseThrowWithInvalidException() {
@@ -101,7 +101,7 @@ class OptionalTest extends \PHPUnit_Framework_TestCase {
 
         $opt = Optional::ofEmpty();
         $this->assertFalse($opt->isPresent());
-        $result = $opt->orElseThrow(new stdClass());
+        $opt->orElseThrow(new stdClass());
     }
 }
  
