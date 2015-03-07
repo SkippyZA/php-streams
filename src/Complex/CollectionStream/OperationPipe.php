@@ -98,6 +98,8 @@ class OperationPipe
 
     public function first()
     {
-        return $this->next();
+        $result = $this->next();
+
+        return Optional::ofNullable($result);
     }
 } 
