@@ -49,10 +49,14 @@ class OperationPipe
         $this->lastOperation = $operation;
     }
 
-    public function next()
+    private function next()
     {
         return $this->lastOperation->advance();
     }
+
+    /*
+     * Operations
+     */
 
     public function limit($limit)
     {
@@ -83,6 +87,10 @@ class OperationPipe
             call_user_func_array($function, array($current));
         }
     }
+
+    /*
+     * Terminators
+     */
 
     public function toArray()
     {
