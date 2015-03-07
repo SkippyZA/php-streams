@@ -79,6 +79,10 @@ class OperationPipe
         return $this;
     }
 
+    /*
+     * Terminators
+     */
+    
     public function each($function)
     {
         $current = null;
@@ -87,10 +91,6 @@ class OperationPipe
             call_user_func_array($function, array($current));
         }
     }
-
-    /*
-     * Terminators
-     */
 
     public function toArray()
     {
