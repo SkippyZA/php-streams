@@ -83,4 +83,16 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertFalse($result->isPresent());
     }
+
+    public function testStreamCanOnlyBeConsumedOnce() {
+        $this->setExpectedException('Complex\CollectionStream\Exception\StreamConsumedException');
+
+        $stream = Stream::from($this->data)
+            ->filter(function($i) {
+                return true;
+            });
+
+        $result = $stream->first();
+        $result2 = $stream->first(); // Exception should be thrown here
+    }
 }

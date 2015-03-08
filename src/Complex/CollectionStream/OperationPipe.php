@@ -3,6 +3,7 @@
 namespace Complex\CollectionStream;
 
 use Complex\CollectionStream\Exception\InvalidParameterException;
+use Complex\CollectionStream\Exception\StreamConsumedException;
 use Complex\CollectionStream\Operation\Filter;
 use Complex\CollectionStream\Operation\Iterator;
 use Complex\CollectionStream\Operation\Limit;
@@ -15,6 +16,7 @@ class OperationPipe
 {
     /** @var Operation */
     private $lastOperation = null;
+    private $isConsumed = false;
 
     public function __construct($iterable)
     {
@@ -55,6 +57,14 @@ class OperationPipe
         return $this->lastOperation->advance();
     }
 
+    private function consumeStream()
+    {
+        if($this->isConsumed)
+            throw new StreamConsumedException();
+
+        $this->isConsumed = true;
+    }
+
     /*
      * Operations
      */
@@ -86,6 +96,8 @@ class OperationPipe
 
     public function each($function)
     {
+        $this->consumeStream();
+
         $current = null;
 
         while (($current = $this->next()) !== null) {
@@ -95,6 +107,8 @@ class OperationPipe
 
     public function toArray()
     {
+        $this->consumeStream();
+
         $current = null;
         $streamValueArray = [];
 
@@ -107,6 +121,8 @@ class OperationPipe
 
     public function first()
     {
+        $this->consumeStream();
+
         $result = $this->next();
 
         return Optional::ofNullable($result);
