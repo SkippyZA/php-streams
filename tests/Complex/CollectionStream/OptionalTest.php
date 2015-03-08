@@ -22,7 +22,7 @@ class OptionalTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testEmptyOptionalThrowsExceptionOnGet() {
-        $this->setExpectedException("Exception");
+        $this->setExpectedException('Complex\CollectionStream\Exception\NoSuchElementException');
 
         $emptyOptional = Optional::ofEmpty();
         $emptyOptional->get(); // Expected to throw exception
@@ -97,7 +97,7 @@ class OptionalTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testOrElseThrowWithInvalidException() {
-        $this->setExpectedException("Exception");
+        $this->setExpectedException('Complex\CollectionStream\Exception\InvalidParameterException');
 
         $opt = Optional::ofEmpty();
         $this->assertFalse($opt->isPresent());

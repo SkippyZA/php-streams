@@ -2,13 +2,13 @@
 
 namespace Complex\CollectionStream;
 
+use Complex\CollectionStream\Exception\InvalidParameterException;
 use Complex\CollectionStream\Operation\Filter;
 use Complex\CollectionStream\Operation\Iterator;
 use Complex\CollectionStream\Operation\Limit;
 use Complex\CollectionStream\Operation\Map;
 use Complex\CollectionStream\Operation\Operation;
 use Complex\CollectionStream\Stream\ArrayStream;
-use Exception;
 use Iterator as StlIterator;
 
 class OperationPipe
@@ -27,7 +27,8 @@ class OperationPipe
             $collection = new ArrayStream($iterable);
 
         } else {
-            throw new Exception(
+
+            throw new InvalidParameterException(
                 "Invalid constructor argument. Must be an array or implement the Iterator interface"
             );
         }
@@ -82,7 +83,7 @@ class OperationPipe
     /*
      * Terminators
      */
-    
+
     public function each($function)
     {
         $current = null;

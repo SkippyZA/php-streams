@@ -2,6 +2,8 @@
 
 namespace Complex\CollectionStream;
 
+use Complex\CollectionStream\Exception\NoSuchElementException;
+use Complex\CollectionStream\Exception\InvalidParameterException;
 use \Exception;
 
 class Optional {
@@ -69,11 +71,11 @@ class Optional {
      * If the value is present, return it, otherwise throws NoSuchElementException
      *
      * @return mixed
-     * @throws Exception
+     * @throws NoSuchElementException
      */
     public function get() {
         if(self::_isNull($this->var))
-            throw new Exception("NoSuchElementException");
+            throw new NoSuchElementException();
 
         return $this->var;
     }
@@ -106,11 +108,12 @@ class Optional {
      *
      * @param $exception
      * @return mixed
+     * @throws InvalidParameterException Thrown if parameter is not an instance of Exception
      * @throws Exception
      */
     public function orElseThrow($exception) {
         if(!$exception instanceof Exception) {
-            throw new Exception("Not type exception");
+            throw new InvalidParameterException("Parameter is not instance of Exception");
         }
 
         if(!self::_isNull($this->var)) {

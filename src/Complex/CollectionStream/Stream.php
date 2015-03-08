@@ -3,16 +3,13 @@
 namespace Complex\CollectionStream;
 
 use Complex\CollectionStream\Stream\RangeStream;
-use Exception;
 
 class Stream
 {
     /**
-     * @param $collection
-     *
-     * @throws Exception
+     * Private constructor to prevent instantiation of Stream
      */
-    private function __construct($collection)
+    private function __construct()
     {
 
     }

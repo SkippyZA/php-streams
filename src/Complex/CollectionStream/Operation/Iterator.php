@@ -2,6 +2,7 @@
 
 namespace Complex\CollectionStream\Operation;
 
+use Complex\CollectionStream\Exception\NotImplementedException;
 use Iterator as StlIterator;
 
 class Iterator extends AbstractOperation
@@ -33,6 +34,6 @@ class Iterator extends AbstractOperation
 
     public function pipe($obj)
     {
-        throw new \Exception("Not implemented");
+        throw new NotImplementedException();
     }
 }
