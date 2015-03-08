@@ -9,10 +9,7 @@ class Stream
     /**
      * Private constructor to prevent instantiation of Stream
      */
-    private function __construct()
-    {
-
-    }
+    private function __construct() { }
 
     /**
      * @param $collection
