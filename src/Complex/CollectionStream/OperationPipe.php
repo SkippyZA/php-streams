@@ -108,14 +108,9 @@ class OperationPipe
 
     public function toArray()
     {
-        $this->consumeStream();
-
-        $current = null;
         $streamValueArray = [];
 
-        while (($current = $this->next()) !== null) {
-            $streamValueArray[] = $current;
-        }
+        $this->each(function($element) use (&$streamValueArray) { $streamValueArray[] = $element; });
 
         return $streamValueArray;
     }
@@ -135,7 +130,9 @@ class OperationPipe
 
         $this->each(function($element) use (&$min) {
             $this->enforceNumericElement($element);
-            if ($min === null || $element < $min) $min = $element;
+            if ($min === null || $element < $min) {
+                $min = $element;
+            }
         });
 
         return $min;
@@ -147,7 +144,9 @@ class OperationPipe
 
         $this->each(function($element) use (&$max) {
             $this->enforceNumericElement($element);
-            if ($max === null || $element > $max) $max = $element;
+            if ($max === null || $element > $max) {
+                $max = $element;
+            }
         });
 
         return $max;
@@ -194,7 +193,9 @@ class OperationPipe
 
     private function enforceNumericElement($element)
     {
-        if (!is_numeric($element)) throw new InvalidElementTypeException();
+        if (!is_numeric($element)) {
+            throw new \InvalidArgumentException(sprintf('{0} is not numeric', gettype($element)));
+        }
     }
 
 } 
