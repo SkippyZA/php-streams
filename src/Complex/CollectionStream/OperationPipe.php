@@ -112,8 +112,8 @@ class OperationPipe
         $streamValueArray = [];
 
         $this->each(function ($element) use (&$streamValueArray) {
-                $streamValueArray[] = $element;
-            });
+            $streamValueArray[] = $element;
+        });
 
         return $streamValueArray;
     }
@@ -132,11 +132,11 @@ class OperationPipe
         $min = null;
 
         $this->each(function ($element) use (&$min) {
-                $this->enforceNumericElement($element);
-                if ($min === null || $element < $min) {
-                    $min = $element;
-                }
-            });
+            $this->enforceNumericElement($element);
+            if ($min === null || $element < $min) {
+                $min = $element;
+            }
+        });
 
         return $min;
     }
@@ -146,11 +146,11 @@ class OperationPipe
         $max = null;
 
         $this->each(function ($element) use (&$max) {
-                $this->enforceNumericElement($element);
-                if ($max === null || $element > $max) {
-                    $max = $element;
-                }
-            });
+            $this->enforceNumericElement($element);
+            if ($max === null || $element > $max) {
+                $max = $element;
+            }
+        });
 
         return $max;
     }
@@ -160,9 +160,9 @@ class OperationPipe
         $sum = 0;
 
         $this->each(function ($element) use (&$sum) {
-                $this->enforceNumericElement($element);
-                $sum += $element;
-            });
+            $this->enforceNumericElement($element);
+            $sum += $element;
+        });
 
         return $sum;
     }
@@ -172,8 +172,8 @@ class OperationPipe
         $count = 0;
 
         $this->each(function ($element) use (&$count) {
-                $count++;
-            });
+            $count++;
+        });
 
         return $count;
     }
@@ -184,10 +184,10 @@ class OperationPipe
         $count = 0;
 
         $this->each(function ($element) use (&$total, &$count) {
-                $this->enforceNumericElement($element);
-                $count++;
-                $total += $element;
-            });
+            $this->enforceNumericElement($element);
+            $count++;
+            $total += $element;
+        });
 
         return $total / $count;
     }
