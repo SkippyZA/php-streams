@@ -3,7 +3,6 @@
 namespace Complex\CollectionStream;
 
 use Complex\CollectionStream\Exception\InvalidParameterException;
-use Complex\CollectionStream\Exception\InvalidElementTypeException;
 use Complex\CollectionStream\Exception\StreamConsumedException;
 use Complex\CollectionStream\Operation\Filter;
 use Complex\CollectionStream\Operation\Iterator;
@@ -11,6 +10,7 @@ use Complex\CollectionStream\Operation\Limit;
 use Complex\CollectionStream\Operation\Map;
 use Complex\CollectionStream\Operation\Operation;
 use Complex\CollectionStream\Stream\ArrayStream;
+use InvalidArgumentException;
 use Iterator as StlIterator;
 
 class OperationPipe
@@ -60,8 +60,9 @@ class OperationPipe
 
     private function consumeStream()
     {
-        if($this->isConsumed)
+        if ($this->isConsumed) {
             throw new StreamConsumedException();
+        }
 
         $this->isConsumed = true;
     }
@@ -110,7 +111,9 @@ class OperationPipe
     {
         $streamValueArray = [];
 
-        $this->each(function($element) use (&$streamValueArray) { $streamValueArray[] = $element; });
+        $this->each(function ($element) use (&$streamValueArray) {
+                $streamValueArray[] = $element;
+            });
 
         return $streamValueArray;
     }
@@ -128,12 +131,12 @@ class OperationPipe
     {
         $min = null;
 
-        $this->each(function($element) use (&$min) {
-            $this->enforceNumericElement($element);
-            if ($min === null || $element < $min) {
-                $min = $element;
-            }
-        });
+        $this->each(function ($element) use (&$min) {
+                $this->enforceNumericElement($element);
+                if ($min === null || $element < $min) {
+                    $min = $element;
+                }
+            });
 
         return $min;
     }
@@ -142,12 +145,12 @@ class OperationPipe
     {
         $max = null;
 
-        $this->each(function($element) use (&$max) {
-            $this->enforceNumericElement($element);
-            if ($max === null || $element > $max) {
-                $max = $element;
-            }
-        });
+        $this->each(function ($element) use (&$max) {
+                $this->enforceNumericElement($element);
+                if ($max === null || $element > $max) {
+                    $max = $element;
+                }
+            });
 
         return $max;
     }
@@ -157,9 +160,9 @@ class OperationPipe
         $sum = 0;
 
         $this->each(function ($element) use (&$sum) {
-            $this->enforceNumericElement($element);
-            $sum += $element;
-        });
+                $this->enforceNumericElement($element);
+                $sum += $element;
+            });
 
         return $sum;
     }
@@ -168,7 +171,9 @@ class OperationPipe
     {
         $count = 0;
 
-        $this->each(function($element) use (&$count) { $count++; });
+        $this->each(function ($element) use (&$count) {
+                $count++;
+            });
 
         return $count;
     }
@@ -178,11 +183,11 @@ class OperationPipe
         $total = 0;
         $count = 0;
 
-        $this->each(function($element) use (&$total, &$count) {
-            $this->enforceNumericElement($element);
-            $count++;
-            $total += $element;
-        });
+        $this->each(function ($element) use (&$total, &$count) {
+                $this->enforceNumericElement($element);
+                $count++;
+                $total += $element;
+            });
 
         return $total / $count;
     }
@@ -194,7 +199,7 @@ class OperationPipe
     private function enforceNumericElement($element)
     {
         if (!is_numeric($element)) {
-            throw new \InvalidArgumentException(sprintf('{0} is not numeric', gettype($element)));
+            throw new InvalidArgumentException(sprintf('{0} is not numeric', gettype($element)));
         }
     }
 
