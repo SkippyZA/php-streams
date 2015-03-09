@@ -3,6 +3,7 @@
 namespace Complex\CollectionStream;
 
 use Complex\CollectionStream\Exception\InvalidParameterException;
+use Complex\CollectionStream\Exception\InvalidElementTypeException;
 use Complex\CollectionStream\Exception\StreamConsumedException;
 use Complex\CollectionStream\Operation\Filter;
 use Complex\CollectionStream\Operation\Iterator;
@@ -132,10 +133,9 @@ class OperationPipe
     {
         $min = null;
 
-        $this->each(function($item) use (&$min) {
-            if ($min === null || $item < $min) {
-                $min = $item;
-            }
+        $this->each(function($element) use (&$min) {
+            $this->enforceNumericElement($element);
+            if ($min === null || $element < $min) $min = $element;
         });
 
         return $min;
@@ -145,12 +145,29 @@ class OperationPipe
     {
         $max = null;
 
-        $this->each(function($item) use (&$max) {
-            if ($max === null || $item > $max) {
-                $max = $item;
-            }
+        $this->each(function($element) use (&$max) {
+            $this->enforceNumericElement($element);
+            if ($max === null || $element > $max) $max = $element;
         });
 
         return $max;
     }
+
+    public function sum()
+    {
+        $sum = 0;
+
+        $this->each(function ($element) use (&$sum) {
+            $this->enforceNumericElement($element);
+            $sum += $element;
+        });
+
+        return $sum;
+    }
+
+    private function enforceNumericElement($element)
+    {
+        if (!is_numeric($element)) throw new InvalidElementTypeException();
+    }
+
 } 

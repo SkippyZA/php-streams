@@ -111,4 +111,11 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($result, 6);
     }
+
+    public function testSumTerminator() {
+        $result = Stream::from($this->data)
+            ->sum();
+
+        $this->assertEquals($result, 21);
+    }
 }
