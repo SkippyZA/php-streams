@@ -125,4 +125,12 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($result, 6);
     }
+
+    public function testAverageTerminator()
+    {
+        $result = Stream::from(array(5, 6, 6, 7))
+            ->average();
+
+        $this->assertEquals($result, 6);
+    }
 }

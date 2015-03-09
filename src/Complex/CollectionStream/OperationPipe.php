@@ -174,6 +174,20 @@ class OperationPipe
         return $count;
     }
 
+    public function average()
+    {
+        $total = 0;
+        $count = 0;
+
+        $this->each(function($element) use (&$total, &$count) {
+            $this->enforceNumericElement($element);
+            $count++;
+            $total += $element;
+        });
+
+        return $total / $count;
+    }
+
     /*
      * Helpers
      */
