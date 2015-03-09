@@ -100,8 +100,6 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $result = Stream::from($this->data)
             ->min();
 
-        echo $result;
-
         $this->assertEquals($result, 1);
     }
 
