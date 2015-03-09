@@ -165,6 +165,19 @@ class OperationPipe
         return $sum;
     }
 
+    public function count()
+    {
+        $count = 0;
+
+        $this->each(function($element) use (&$count) { $count++; });
+
+        return $count;
+    }
+
+    /*
+     * Helpers
+     */
+
     private function enforceNumericElement($element)
     {
         if (!is_numeric($element)) throw new InvalidElementTypeException();

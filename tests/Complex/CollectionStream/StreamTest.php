@@ -118,4 +118,11 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($result, 21);
     }
+
+    public function testCountTerminator() {
+        $result = Stream::from($this->data)
+            ->count();
+
+        $this->assertEquals($result, 6);
+    }
 }
