@@ -127,4 +127,30 @@ class OperationPipe
 
         return Optional::ofNullable($result);
     }
+
+    public function min()
+    {
+        $min = null;
+
+        $this->each(function($item) use (&$min) {
+            if ($min === null || $item < $min) {
+                $min = $item;
+            }
+        });
+
+        return $min;
+    }
+
+    public function max()
+    {
+        $max = null;
+
+        $this->each(function($item) use (&$max) {
+            if ($max === null || $item > $max) {
+                $max = $item;
+            }
+        });
+
+        return $max;
+    }
 } 

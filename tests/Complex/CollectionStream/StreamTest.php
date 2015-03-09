@@ -95,4 +95,20 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $result = $stream->first();
         $result2 = $stream->first(); // Exception should be thrown here
     }
+
+    public function testMinTerminator() {
+        $result = Stream::from($this->data)
+            ->min();
+
+        echo $result;
+
+        $this->assertEquals($result, 1);
+    }
+
+    public function testMaxTerminator() {
+        $result = Stream::from($this->data)
+            ->max();
+
+        $this->assertEquals($result, 6);
+    }
 }
