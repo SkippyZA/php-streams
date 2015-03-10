@@ -103,9 +103,23 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 1);
     }
 
+    public function testMinTerminatorWithComparator() {
+        $result = Stream::from($this->data)
+            ->min(function($element) { return $element; });
+
+        $this->assertEquals($result, 1);
+    }
+
     public function testMaxTerminator() {
         $result = Stream::from($this->data)
             ->max();
+
+        $this->assertEquals($result, 6);
+    }
+
+    public function testMaxTerminatorWithComparator() {
+        $result = Stream::from($this->data)
+            ->max(function($element) { return $element; });
 
         $this->assertEquals($result, 6);
     }

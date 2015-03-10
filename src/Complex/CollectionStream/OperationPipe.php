@@ -127,29 +127,31 @@ class OperationPipe
         return Optional::ofNullable($result);
     }
 
-    public function min()
+    public function min($comparator = null)
     {
         $min = null;
 
-        $this->each(function ($element) use (&$min) {
-            $this->enforceNumericElement($element);
-            if ($min === null || $element < $min) {
-                $min = $element;
-            }
+        $this->each(function ($element) use (&$min, $comparator) {
+            $value = $this->getComparableValue($element, $comparator);
+
+            $this->compare($min, $value, function($min, $value) {
+                return $value < $min;
+            });
         });
 
         return $min;
     }
 
-    public function max()
+    public function max($comparator = null)
     {
         $max = null;
 
-        $this->each(function ($element) use (&$max) {
-            $this->enforceNumericElement($element);
-            if ($max === null || $element > $max) {
-                $max = $element;
-            }
+        $this->each(function ($element) use (&$max, $comparator) {
+            $value = $this->getComparableValue($element, $comparator);
+
+            $this->compare($max, $value, function($max, $value) {
+                return $value > $max;
+            });
         });
 
         return $max;
@@ -196,10 +198,44 @@ class OperationPipe
      * Helpers
      */
 
+    /**
+     * Gets a comparable value through a closure or the element itself. Will throw an error for invalid types.
+     *
+     * @param mixed $element To be used as a parameter for the closure.
+     * @param null $comparator Closure to fetch the comparable value.
+     * @return mixed Comparable value
+     */
+    private function getComparableValue($element, $comparator = null) {
+        $comparable = null;
+
+        if ($comparator !== null) {
+            $comparable = call_user_func($comparator, $element);
+        } else {
+            $comparable = $element;
+        }
+
+        $this->enforceNumericElement($comparable);
+
+        return $comparable;
+    }
+
     private function enforceNumericElement($element)
     {
         if (!is_numeric($element)) {
             throw new InvalidArgumentException(sprintf('{0} is not numeric', gettype($element)));
+        }
+    }
+
+    /**
+     * Compares values using a closure with null as a lazy pre execution step.
+     *
+     * @param $closure
+     * @param mixed $current The value to be compared against
+     * @param mixed $comparable The value to be compared
+     */
+    private function compare(&$current, $comparable, $closure) {
+        if ($current == null || call_user_func($closure, $current, $comparable)) {
+            $current = $comparable;
         }
     }
 
