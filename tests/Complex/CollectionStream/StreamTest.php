@@ -156,16 +156,26 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
     public function testSumTerminator() {
         $result = Stream::from($this->data)
-            ->sum();
+            ->sum()
+            ->orElse(null);
 
         $this->assertEquals($result, 21);
     }
 
     public function testSumTerminatorWithComparator() {
         $result = Stream::from($this->people)
-            ->sum(array($this, 'getAge'));
+            ->sum(array($this, 'getAge'))
+            ->orElse(null);
 
         $this->assertEquals($result, 105);
+    }
+
+    public function testSumTerminatorWithEmptyStream() {
+        $result = Stream::from(array())
+            ->sum()
+        ->orElse(null);
+
+        $this->assertEquals($result, null);
     }
 
     public function testCountTerminator() {
@@ -175,10 +185,18 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 6);
     }
 
+    public function testCountTerminatorWithEmptyStream() {
+        $result = Stream::from(array())
+            ->count();
+
+        $this->assertEquals($result, 0);
+    }
+
     public function testAverageTerminator()
     {
         $result = Stream::from(array(5, 6, 6, 7))
-            ->average();
+            ->average()
+            ->orElse(null);
 
         $this->assertEquals($result, 6);
     }
@@ -186,9 +204,28 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
     public function testAverageTerminatorWithComparator()
     {
         $result = Stream::from($this->people)
-            ->average(array($this, 'getAge'));
+            ->average(array($this, 'getAge'))
+            ->orElse(null);
 
         $this->assertEquals($result, 26.25);
+    }
+
+    public function testAverageTerminatorWithEmptyStream()
+    {
+        $result = Stream::from(array())
+            ->average()
+            ->orElse(null);
+
+        $this->assertEquals($result, null);
+    }
+
+    public function testAverageTerminatorWithZeroAverage()
+    {
+        $result = Stream::from(array(0,0,0,0))
+            ->average()
+            ->orElse(null);
+
+        $this->assertEquals($result, 0);
     }
 
     public function getAge(Person $person) {

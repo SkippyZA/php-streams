@@ -167,7 +167,7 @@ class OperationPipe
             $sum += $value;
         });
 
-        return $sum;
+        return Optional::ofNullable($sum);
     }
 
     public function count()
@@ -193,7 +193,11 @@ class OperationPipe
             $total += $value;
         });
 
-        return $total / $count;
+        if ($count == 0) {
+            return Optional::ofEmpty();
+        }
+
+        return Optional::ofNullable($total / $count);
     }
 
     /*
