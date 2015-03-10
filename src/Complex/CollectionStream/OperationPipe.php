@@ -226,9 +226,9 @@ class OperationPipe
     /**
      * Compares values using a closure with null as a lazy pre execution step.
      *
-     * @param $closure
      * @param mixed $current The value to be compared against
      * @param mixed $comparable The value to be compared
+     * @param $closure
      */
     private function compare(&$current, $comparable, $closure) {
         if ($current == null || call_user_func($closure, $current, $comparable)) {
