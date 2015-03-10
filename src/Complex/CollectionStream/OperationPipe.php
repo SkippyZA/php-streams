@@ -140,17 +140,13 @@ class OperationPipe
 
     public function min($comparator = null)
     {
-        $min = null;
-
-        $this->each(function ($element) use (&$min, $comparator) {
+        return $this->reduce(null, function($min, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
-            $min = $this->compare($min, $value, function($min, $value) {
+            return $this->compare($min, $value, function($min, $value) {
                 return $value < $min;
             });
         });
-
-        return Optional::ofNullable($min);
     }
 
     public function max($comparator = null)
