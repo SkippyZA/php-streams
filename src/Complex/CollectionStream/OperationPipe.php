@@ -162,15 +162,11 @@ class OperationPipe
 
     public function sum($comparator = null)
     {
-        $sum = 0;
-
-        $this->each(function ($element) use (&$sum, $comparator) {
+        return $this->reduce(null, function($sum, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
-            $sum += $value;
+            return $sum + $value;
         });
-
-        return Optional::ofNullable($sum);
     }
 
     public function count()
