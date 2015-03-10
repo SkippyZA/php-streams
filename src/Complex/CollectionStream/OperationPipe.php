@@ -134,7 +134,7 @@ class OperationPipe
         $this->each(function ($element) use (&$min, $comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
-            $this->compare($min, $value, function($min, $value) {
+            $min = $this->compare($min, $value, function($min, $value) {
                 return $value < $min;
             });
         });
@@ -149,7 +149,7 @@ class OperationPipe
         $this->each(function ($element) use (&$max, $comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
-            $this->compare($max, $value, function($max, $value) {
+            $max = $this->compare($max, $value, function($max, $value) {
                 return $value > $max;
             });
         });
@@ -225,16 +225,19 @@ class OperationPipe
 
     /**
      * Compares values using a closure. If the current value is null, the comparison will not be executed and $current
-     * will take on the value as if the comparison were True.
+     * will take on the value as if the result of the comparison were True.
      *
      * @param mixed $current The value to be compared against
      * @param mixed $comparable The value to be compared
      * @param $closure
+     * @return mixed
      */
-    private function compare(&$current, $comparable, $closure) {
+    private function compare($current, $comparable, $closure) {
         if ($current == null || call_user_func($closure, $current, $comparable)) {
-            $current = $comparable;
+            return $comparable;
         }
+
+        return $current;
     }
 
 } 
