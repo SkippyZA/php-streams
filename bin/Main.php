@@ -2,7 +2,7 @@
 
 require '../vendor/autoload.php';
 
-use Complex\Demo\Person;
+use Complex\Lib\Person;
 use Complex\CollectionStream\Stream;
 
 class Main {

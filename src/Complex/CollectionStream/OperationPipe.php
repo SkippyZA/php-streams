@@ -157,13 +157,14 @@ class OperationPipe
         return $max;
     }
 
-    public function sum()
+    public function sum($comparator = null)
     {
         $sum = 0;
 
-        $this->each(function ($element) use (&$sum) {
-            $this->enforceNumericElement($element);
-            $sum += $element;
+        $this->each(function ($element) use (&$sum, $comparator) {
+            $value = $this->getComparableValue($element, $comparator);
+
+            $sum += $value;
         });
 
         return $sum;
@@ -180,15 +181,16 @@ class OperationPipe
         return $count;
     }
 
-    public function average()
+    public function average($comparator = null)
     {
         $total = 0;
         $count = 0;
 
-        $this->each(function ($element) use (&$total, &$count) {
-            $this->enforceNumericElement($element);
+        $this->each(function ($element) use (&$total, &$count, $comparator) {
+            $value = $this->getComparableValue($element, $comparator);
+
             $count++;
-            $total += $element;
+            $total += $value;
         });
 
         return $total / $count;
@@ -214,16 +216,11 @@ class OperationPipe
             $comparable = $element;
         }
 
-        $this->enforceNumericElement($comparable);
+        if (!is_numeric($comparable)) {
+            throw new InvalidArgumentException(sprintf('{0} is not numeric', gettype($comparable)));
+        }
 
         return $comparable;
-    }
-
-    private function enforceNumericElement($element)
-    {
-        if (!is_numeric($element)) {
-            throw new InvalidArgumentException(sprintf('{0} is not numeric', gettype($element)));
-        }
     }
 
     /**
