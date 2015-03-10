@@ -130,6 +130,6 @@ class Optional {
      * @return bool
      */
     private static function _isNull($var) {
-        return ($var == null);
+        return ($var === null);
     }
 }

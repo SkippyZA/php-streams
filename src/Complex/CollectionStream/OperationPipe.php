@@ -171,13 +171,9 @@ class OperationPipe
 
     public function count()
     {
-        $count = 0;
-
-        $this->each(function ($element) use (&$count) {
-            $count++;
-        });
-
-        return $count;
+        return $this->reduce(0, function($count, $i) {
+            return ++$count;
+        })->get();
     }
 
     public function average($comparator = null)
