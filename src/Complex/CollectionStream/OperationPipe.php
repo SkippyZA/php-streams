@@ -139,7 +139,7 @@ class OperationPipe
             });
         });
 
-        return $min;
+        return Optional::ofNullable($min);
     }
 
     public function max($comparator = null)
@@ -154,7 +154,7 @@ class OperationPipe
             });
         });
 
-        return $max;
+        return Optional::ofNullable($max);
     }
 
     public function sum($comparator = null)

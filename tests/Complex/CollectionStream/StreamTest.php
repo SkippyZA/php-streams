@@ -107,30 +107,51 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
     public function testMinTerminator() {
         $result = Stream::from($this->data)
-            ->min();
+            ->min()
+            ->orElse(null);
 
         $this->assertEquals($result, 1);
     }
 
     public function testMinTerminatorWithComparator() {
         $result = Stream::from($this->people)
-            ->min(array($this, 'getAge'));
+            ->min(array($this, 'getAge'))
+            ->orElse(null);
 
         $this->assertEquals($result, 24);
     }
 
+    public function testMinTerminatorWithEmptyStream()
+    {
+        $result = Stream::from(array())
+            ->min()
+            ->orElse(null);
+
+        $this->assertEquals($result, null);
+    }
+
     public function testMaxTerminator() {
         $result = Stream::from($this->data)
-            ->max();
+            ->max()
+            ->orElse(null);
 
         $this->assertEquals($result, 6);
     }
 
     public function testMaxTerminatorWithComparator() {
         $result = Stream::from($this->people)
-            ->max(array($this, 'getAge'));
+            ->max(array($this, 'getAge'))
+            ->orElse(null);
 
         $this->assertEquals($result, 28);
+    }
+
+    public function testMaxTerminatorWithEmptyStream() {
+        $result = Stream::from(array())
+            ->max()
+            ->orElse(null);
+
+        $this->assertEquals($result, null);
     }
 
     public function testSumTerminator() {
