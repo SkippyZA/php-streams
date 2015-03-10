@@ -178,21 +178,17 @@ class OperationPipe
 
     public function average($comparator = null)
     {
-        $total = 0;
-        $count = 0;
+        $averageData = $this->reduce(array('total' => 0, 'count' => 0), function($metrics, $element) use ($comparator) {
+            $metrics['total'] += $this->getComparableValue($element, $comparator);
+            $metrics['count'] += 1;
+            return $metrics;
+        })->get();
 
-        $this->each(function ($element) use (&$total, &$count, $comparator) {
-            $value = $this->getComparableValue($element, $comparator);
-
-            $count++;
-            $total += $value;
-        });
-
-        if ($count == 0) {
+        if ($averageData['count'] == 0) {
             return Optional::ofEmpty();
         }
 
-        return Optional::ofNullable($total / $count);
+        return Optional::ofNullable($averageData['total'] / $averageData['count']);
     }
 
     /*
