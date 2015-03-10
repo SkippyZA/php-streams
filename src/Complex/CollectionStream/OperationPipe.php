@@ -224,7 +224,8 @@ class OperationPipe
     }
 
     /**
-     * Compares values using a closure with null as a lazy pre execution step.
+     * Compares values using a closure. If the current value is null, the comparison will not be executed and $current
+     * will take on the value as if the comparison were True.
      *
      * @param mixed $current The value to be compared against
      * @param mixed $comparable The value to be compared
