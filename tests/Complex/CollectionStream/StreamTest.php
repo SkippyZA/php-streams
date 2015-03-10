@@ -4,14 +4,23 @@ namespace Complex\CollectionStream;
 
 use Complex\CollectionStream;
 
+use Complex\Lib\Person;
+
 class StreamTest extends \PHPUnit_Framework_TestCase {
 
     protected $data;
     protected $dataReversed;
+    protected $people;
 
     public function setUp() {
         $this->data = array(1, 2, 3, 4, 5, 6);
         $this->dataReversed = array(6, 5, 4, 3, 2, 1);
+        $this->people = [
+            new Person("Steven", "Inskip", 27, Person::MALE),
+            new Person("Shaun", "Egan", 28, Person::MALE),
+            new Person("Sheree", "Joubert", 24, Person::FEMALE),
+            new Person("Daniel", "Peters", 26, Person::MALE)
+        ];
     }
 
     public function testToArray() {
@@ -103,6 +112,13 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 1);
     }
 
+    public function testMinTerminatorWithComparator() {
+        $result = Stream::from($this->people)
+            ->min(array($this, 'getAge'));
+
+        $this->assertEquals($result, 24);
+    }
+
     public function testMaxTerminator() {
         $result = Stream::from($this->data)
             ->max();
@@ -110,11 +126,25 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 6);
     }
 
+    public function testMaxTerminatorWithComparator() {
+        $result = Stream::from($this->people)
+            ->max(array($this, 'getAge'));
+
+        $this->assertEquals($result, 28);
+    }
+
     public function testSumTerminator() {
         $result = Stream::from($this->data)
             ->sum();
 
         $this->assertEquals($result, 21);
+    }
+
+    public function testSumTerminatorWithComparator() {
+        $result = Stream::from($this->people)
+            ->sum(array($this, 'getAge'));
+
+        $this->assertEquals($result, 105);
     }
 
     public function testCountTerminator() {
@@ -130,5 +160,17 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
             ->average();
 
         $this->assertEquals($result, 6);
+    }
+
+    public function testAverageTerminatorWithComparator()
+    {
+        $result = Stream::from($this->people)
+            ->average(array($this, 'getAge'));
+
+        $this->assertEquals($result, 26.25);
+    }
+
+    public function getAge(Person $person) {
+        return $person->getAge();
     }
 }
