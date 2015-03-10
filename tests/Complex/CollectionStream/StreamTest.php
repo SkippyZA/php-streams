@@ -228,6 +228,17 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 0);
     }
 
+    public function testReduceTerminator() {
+        // performing a sum reduction on people's age
+        $result = Stream::from($this->people)
+            ->reduce(0, function($result, Person $person) {
+                return $result + $person->getAge();
+            })
+            ->orElse(null);
+
+        $this->assertEquals($result, 105);
+    }
+
     public function getAge(Person $person) {
         return $person->getAge();
     }

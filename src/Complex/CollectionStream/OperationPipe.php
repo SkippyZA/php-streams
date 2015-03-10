@@ -127,6 +127,17 @@ class OperationPipe
         return Optional::ofNullable($result);
     }
 
+    public function reduce($identity, $accumulator)
+    {
+        $result = $identity;
+
+        $this->each(function($element) use (&$result, $accumulator) {
+            $result = call_user_func($accumulator, $result, $element);
+        });
+
+        return Optional::ofNullable($result);
+    }
+
     public function min($comparator = null)
     {
         $min = null;
