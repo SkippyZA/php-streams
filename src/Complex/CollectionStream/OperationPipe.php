@@ -151,17 +151,13 @@ class OperationPipe
 
     public function max($comparator = null)
     {
-        $max = null;
-
-        $this->each(function ($element) use (&$max, $comparator) {
+        return $this->reduce(null, function($max, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
-            $max = $this->compare($max, $value, function($max, $value) {
+            return $this->compare($max, $value, function($max, $value) {
                 return $value > $max;
             });
         });
-
-        return Optional::ofNullable($max);
     }
 
     public function sum($comparator = null)
