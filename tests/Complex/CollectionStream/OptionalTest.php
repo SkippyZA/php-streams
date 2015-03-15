@@ -97,7 +97,7 @@ class OptionalTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testOrElseThrowWithInvalidException() {
-        $this->setExpectedException('Complex\CollectionStream\Exception\InvalidParameterException');
+        $this->setExpectedException('InvalidArgumentException');
 
         $opt = Optional::ofEmpty();
         $this->assertFalse($opt->isPresent());

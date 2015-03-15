@@ -239,6 +239,68 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 105);
     }
 
+    public function testFlatMap() {
+        $frontend = new \stdClass();
+        $frontend->name = "Frontend";
+        $frontend->staff = array(
+            new Person("John", "Marley", 38, Person::MALE),
+            new Person("Some", "Woman", 28, Person::FEMALE)
+        );
+
+        $backend = new \stdClass();
+        $backend->name = "Backend";
+        $backend->staff = array(
+            new Person("Steven", "Inskip", 27, Person::MALE),
+            new Person("Shaun", "Egan", 52, Person::MALE),
+            new Person("Eager", "Beaver", 18, Person::FEMALE)
+        );
+
+        $creative = new \stdClass();
+        $creative->name = "Creative";
+        $creative->staff = array(
+            new Person("Bob", "World", 42, Person::MALE),
+            new Person("Sally", "Sue", 24, Person::FEMALE),
+            new Person("Hippy", "McGee", 21, Person::FEMALE),
+            new Person("Bare", "Foot", 26, Person::MALE),
+        );
+
+        $teams = array($frontend, $backend, $creative);
+
+        $expected = array(
+            "Sally", "Hippy"
+        );
+
+        $result = Stream::from($teams)
+            ->filter(function($obj) {                       // Only the creative team
+                return ($obj->name === "Creative");
+            })
+            ->flatMap(function($obj) {                      // Get the staff members
+                return $obj->staff;
+            })
+            ->filter(function(Person $p) {                  // Only females
+                return ($p->getSex() == Person::FEMALE);
+            })
+            ->map(function(Person $p) {                     // Get their first names
+                return $p->getFirstName();
+            })
+            ->toArray();                                    // Return an array of creative teams female first names
+
+        $this->assertEquals($expected, $result);
+
+        // Max age of all team members
+        $maxAge = Stream::from($teams)
+            ->flatMap(function($obj) {
+                return $obj->staff;
+            })
+            ->max(function(Person $p) {
+                return $p->getAge();
+            })
+            ->get();
+
+        $this->assertEquals(52, $maxAge);
+    }
+
+
     public function getAge(Person $person) {
         return $person->getAge();
     }

@@ -2,9 +2,9 @@
 
 namespace Complex\CollectionStream;
 
-use Complex\CollectionStream\Exception\InvalidParameterException;
 use Complex\CollectionStream\Exception\StreamConsumedException;
 use Complex\CollectionStream\Operation\Filter;
+use Complex\CollectionStream\Operation\FlatMap;
 use Complex\CollectionStream\Operation\Iterator;
 use Complex\CollectionStream\Operation\Limit;
 use Complex\CollectionStream\Operation\Map;
@@ -31,7 +31,7 @@ class OperationPipe
 
         } else {
 
-            throw new InvalidParameterException(
+            throw new InvalidArgumentException(
                 "Invalid constructor argument. Must be an array or implement the Iterator interface"
             );
         }
@@ -92,6 +92,15 @@ class OperationPipe
         return $this;
     }
 
+    public function flatMap($function)
+    {
+        $this->add(new Map($function));
+
+        $this->add(new FlatMap());
+
+        return $this;
+    }
+
     /*
      * Terminators
      */
@@ -131,7 +140,7 @@ class OperationPipe
     {
         $result = $identity;
 
-        $this->each(function($element) use (&$result, $accumulator) {
+        $this->each(function ($element) use (&$result, $accumulator) {
             $result = call_user_func($accumulator, $result, $element);
         });
 
@@ -140,10 +149,10 @@ class OperationPipe
 
     public function min($comparator = null)
     {
-        return $this->reduce(null, function($min, $element) use ($comparator) {
+        return $this->reduce(null, function ($min, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
-            return $this->compare($min, $value, function($min, $value) {
+            return $this->compare($min, $value, function ($min, $value) {
                 return $value < $min;
             });
         });
@@ -151,10 +160,10 @@ class OperationPipe
 
     public function max($comparator = null)
     {
-        return $this->reduce(null, function($max, $element) use ($comparator) {
+        return $this->reduce(null, function ($max, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
-            return $this->compare($max, $value, function($max, $value) {
+            return $this->compare($max, $value, function ($max, $value) {
                 return $value > $max;
             });
         });
@@ -162,7 +171,7 @@ class OperationPipe
 
     public function sum($comparator = null)
     {
-        return $this->reduce(null, function($sum, $element) use ($comparator) {
+        return $this->reduce(null, function ($sum, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
 
             return $sum + $value;
@@ -171,18 +180,19 @@ class OperationPipe
 
     public function count()
     {
-        return $this->reduce(0, function($count, $i) {
+        return $this->reduce(0, function ($count, $i) {
             return ++$count;
         })->get();
     }
 
     public function average($comparator = null)
     {
-        $averageData = $this->reduce(array('total' => 0, 'count' => 0), function($metrics, $element) use ($comparator) {
-            $metrics['total'] += $this->getComparableValue($element, $comparator);
-            $metrics['count'] += 1;
-            return $metrics;
-        })->get();
+        $averageData = $this->reduce(array('total' => 0, 'count' => 0),
+            function ($metrics, $element) use ($comparator) {
+                $metrics['total'] += $this->getComparableValue($element, $comparator);
+                $metrics['count'] += 1;
+                return $metrics;
+            })->get();
 
         if ($averageData['count'] == 0) {
             return Optional::ofEmpty();
@@ -202,7 +212,8 @@ class OperationPipe
      * @param null $comparator Closure to fetch the comparable value.
      * @return mixed Comparable value
      */
-    private function getComparableValue($element, $comparator = null) {
+    private function getComparableValue($element, $comparator = null)
+    {
         $comparable = null;
 
         if ($comparator !== null) {
@@ -227,7 +238,8 @@ class OperationPipe
      * @param $closure
      * @return mixed
      */
-    private function compare($current, $comparable, $closure) {
+    private function compare($current, $comparable, $closure)
+    {
         if ($current == null || call_user_func($closure, $current, $comparable)) {
             return $comparable;
         }
