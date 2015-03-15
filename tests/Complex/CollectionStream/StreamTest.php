@@ -6,13 +6,15 @@ use Complex\CollectionStream;
 
 use Complex\Lib\Person;
 
-class StreamTest extends \PHPUnit_Framework_TestCase {
+class StreamTest extends \PHPUnit_Framework_TestCase
+{
 
     protected $data;
     protected $dataReversed;
     protected $people;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->data = array(1, 2, 3, 4, 5, 6);
         $this->dataReversed = array(6, 5, 4, 3, 2, 1);
         $this->people = [
@@ -23,51 +25,66 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         ];
     }
 
-    public function testToArray() {
+    public function testToArray()
+    {
         $result = Stream::from($this->data)->toArray();
 
         $this->assertEquals($result, $this->data);
     }
 
-    public function testPositiveRange() {
+    public function testPositiveRange()
+    {
         $result = Stream::range(1, 6)->toArray();
 
         $this->assertEquals($result, $this->data);
     }
 
-    public function testNegativeRange() {
+    public function testNegativeRange()
+    {
         $result = Stream::range(6, 1)->toArray();
 
         $this->assertEquals($result, $this->dataReversed);
     }
 
-    public function testFilter() {
+    public function testFilter()
+    {
         $result = Stream::from($this->data)
-            ->filter(function($i) { return $i % 2 == 0; })
+            ->filter(function ($i) {
+                    return $i % 2 == 0;
+                })
             ->toArray();
 
         $this->assertEquals($result, array(2, 4, 6));
     }
 
-    public function testMap() {
+    public function testMap()
+    {
         $result = Stream::from($this->data)
-            ->map(function($i) { return 1; })
+            ->map(function ($i) {
+                    return 1;
+                })
             ->toArray();
 
         $this->assertEquals($result, array(1, 1, 1, 1, 1, 1));
     }
 
-    public function testFilteredMap() {
+    public function testFilteredMap()
+    {
         // bit more complex test -> get squares of odd numbers
         $result = Stream::from($this->data)
-            ->filter(function($i) { return $i % 2 == 1; })
-            ->map(function($i) { return $i * $i; })
+            ->filter(function ($i) {
+                    return $i % 2 == 1;
+                })
+            ->map(function ($i) {
+                    return $i * $i;
+                })
             ->toArray();
 
         $this->assertEquals($result, array(1, 9, 25));
     }
 
-    public function testLimit() {
+    public function testLimit()
+    {
         $result = Stream::from($this->data)
             ->limit(3)
             ->toArray();
@@ -75,7 +92,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, array(1, 2, 3));
     }
 
-    public function testFirstHasValue() {
+    public function testFirstHasValue()
+    {
         $result = Stream::from($this->data)
             ->first();
 
@@ -83,9 +101,10 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $result->get());
     }
 
-    public function testFirstWithoutValue() {
+    public function testFirstWithoutValue()
+    {
         $result = Stream::from($this->data)
-            ->filter(function($i) {
+            ->filter(function ($i) {
                 return false;
             })
             ->first();
@@ -93,11 +112,12 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($result->isPresent());
     }
 
-    public function testStreamCanOnlyBeConsumedOnce() {
+    public function testStreamCanOnlyBeConsumedOnce()
+    {
         $this->setExpectedException('Complex\CollectionStream\Exception\StreamConsumedException');
 
         $stream = Stream::from($this->data)
-            ->filter(function($i) {
+            ->filter(function ($i) {
                 return true;
             });
 
@@ -105,7 +125,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $result2 = $stream->first(); // Exception should be thrown here
     }
 
-    public function testMinTerminator() {
+    public function testMinTerminator()
+    {
         $result = Stream::from($this->data)
             ->min()
             ->orElse(null);
@@ -113,7 +134,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 1);
     }
 
-    public function testMinTerminatorWithComparator() {
+    public function testMinTerminatorWithComparator()
+    {
         $result = Stream::from($this->people)
             ->min(array($this, 'getAge'))
             ->orElse(null);
@@ -130,7 +152,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, null);
     }
 
-    public function testMaxTerminator() {
+    public function testMaxTerminator()
+    {
         $result = Stream::from($this->data)
             ->max()
             ->orElse(null);
@@ -138,7 +161,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 6);
     }
 
-    public function testMaxTerminatorWithComparator() {
+    public function testMaxTerminatorWithComparator()
+    {
         $result = Stream::from($this->people)
             ->max(array($this, 'getAge'))
             ->orElse(null);
@@ -146,7 +170,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 28);
     }
 
-    public function testMaxTerminatorWithEmptyStream() {
+    public function testMaxTerminatorWithEmptyStream()
+    {
         $result = Stream::from(array())
             ->max()
             ->orElse(null);
@@ -154,7 +179,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, null);
     }
 
-    public function testSumTerminator() {
+    public function testSumTerminator()
+    {
         $result = Stream::from($this->data)
             ->sum()
             ->orElse(null);
@@ -162,7 +188,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 21);
     }
 
-    public function testSumTerminatorWithComparator() {
+    public function testSumTerminatorWithComparator()
+    {
         $result = Stream::from($this->people)
             ->sum(array($this, 'getAge'))
             ->orElse(null);
@@ -170,22 +197,25 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 105);
     }
 
-    public function testSumTerminatorWithEmptyStream() {
+    public function testSumTerminatorWithEmptyStream()
+    {
         $result = Stream::from(array())
             ->sum()
-        ->orElse(null);
+            ->orElse(null);
 
         $this->assertEquals($result, null);
     }
 
-    public function testCountTerminator() {
+    public function testCountTerminator()
+    {
         $result = Stream::from($this->data)
             ->count();
 
         $this->assertEquals($result, 6);
     }
 
-    public function testCountTerminatorWithEmptyStream() {
+    public function testCountTerminatorWithEmptyStream()
+    {
         $result = Stream::from(array())
             ->count();
 
@@ -221,17 +251,18 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
     public function testAverageTerminatorWithZeroAverage()
     {
-        $result = Stream::from(array(0,0,0,0))
+        $result = Stream::from(array(0, 0, 0, 0))
             ->average()
             ->orElse(null);
 
         $this->assertEquals($result, 0);
     }
 
-    public function testReduceTerminator() {
+    public function testReduceTerminator()
+    {
         // performing a sum reduction on people's age
         $result = Stream::from($this->people)
-            ->reduce(0, function($result, Person $person) {
+            ->reduce(0, function ($result, Person $person) {
                 return $result + $person->getAge();
             })
             ->orElse(null);
@@ -239,7 +270,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($result, 105);
     }
 
-    public function testFlatMap() {
+    public function testFlatMap()
+    {
         $frontend = new \stdClass();
         $frontend->name = "Frontend";
         $frontend->staff = array(
@@ -267,20 +299,21 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $teams = array($frontend, $backend, $creative);
 
         $expected = array(
-            "Sally", "Hippy"
+            "Sally",
+            "Hippy"
         );
 
         $result = Stream::from($teams)
-            ->filter(function($obj) {                       // Only the creative team
+            ->filter(function ($obj) {                       // Only the creative team
                 return ($obj->name === "Creative");
             })
-            ->flatMap(function($obj) {                      // Get the staff members
+            ->flatMap(function ($obj) {                      // Get the staff members
                 return $obj->staff;
             })
-            ->filter(function(Person $p) {                  // Only females
+            ->filter(function (Person $p) {                  // Only females
                 return ($p->getSex() == Person::FEMALE);
             })
-            ->map(function(Person $p) {                     // Get their first names
+            ->map(function (Person $p) {                     // Get their first names
                 return $p->getFirstName();
             })
             ->toArray();                                    // Return an array of creative teams female first names
@@ -289,10 +322,10 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 
         // Max age of all team members
         $maxAge = Stream::from($teams)
-            ->flatMap(function($obj) {
+            ->flatMap(function ($obj) {
                 return $obj->staff;
             })
-            ->max(function(Person $p) {
+            ->max(function (Person $p) {
                 return $p->getAge();
             })
             ->get();
@@ -300,8 +333,25 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(52, $maxAge);
     }
 
+    public function testPeak()
+    {
+        $count = 1;
 
-    public function getAge(Person $person) {
+        Stream::from($this->data)
+            ->peak(function($i) use (&$count) {
+                $this->assertEquals($count, $i);
+
+                return -1; // This should not effect the stream
+            })
+            ->each(function($i) use (&$count) {
+                $this->assertEquals($count, $i);
+                $count++;
+            });
+    }
+
+
+    public function getAge(Person $person)
+    {
         return $person->getAge();
     }
 }

@@ -8,6 +8,7 @@ use Complex\CollectionStream\Operation\FlatMap;
 use Complex\CollectionStream\Operation\Iterator;
 use Complex\CollectionStream\Operation\Limit;
 use Complex\CollectionStream\Operation\Map;
+use Complex\CollectionStream\Operation\Peak;
 use Complex\CollectionStream\Operation\Operation;
 use Complex\CollectionStream\Stream\ArrayStream;
 use InvalidArgumentException;
@@ -97,6 +98,13 @@ class OperationPipe
         $this->add(new Map($function));
 
         $this->add(new FlatMap());
+
+        return $this;
+    }
+
+    public function peak($function)
+    {
+        $this->add(new Peak($function));
 
         return $this;
     }
