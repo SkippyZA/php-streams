@@ -79,21 +79,21 @@ class OperationPipe
         return $this;
     }
 
-    public function filter($function)
+    public function filter(callable $function)
     {
         $this->add(new Filter($function));
 
         return $this;
     }
 
-    public function map($function)
+    public function map(callable $function)
     {
         $this->add(new Map($function));
 
         return $this;
     }
 
-    public function flatMap($function)
+    public function flatMap(callable $function)
     {
         $this->add(new Map($function));
 
@@ -102,7 +102,7 @@ class OperationPipe
         return $this;
     }
 
-    public function peak($function)
+    public function peak(callable $function)
     {
         $this->add(new Peak($function));
 
@@ -113,7 +113,7 @@ class OperationPipe
      * Terminators
      */
 
-    public function each($function)
+    public function each(callable $function)
     {
         $this->consumeStream();
 
@@ -144,7 +144,7 @@ class OperationPipe
         return Optional::ofNullable($result);
     }
 
-    public function reduce($identity, $accumulator)
+    public function reduce($identity, callable $accumulator)
     {
         $result = $identity;
 
@@ -155,7 +155,7 @@ class OperationPipe
         return Optional::ofNullable($result);
     }
 
-    public function min($comparator = null)
+    public function min(callable $comparator = null)
     {
         return $this->reduce(null, function ($min, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
@@ -166,7 +166,7 @@ class OperationPipe
         });
     }
 
-    public function max($comparator = null)
+    public function max(callable $comparator = null)
     {
         return $this->reduce(null, function ($max, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
@@ -177,7 +177,7 @@ class OperationPipe
         });
     }
 
-    public function sum($comparator = null)
+    public function sum(callable $comparator = null)
     {
         return $this->reduce(null, function ($sum, $element) use ($comparator) {
             $value = $this->getComparableValue($element, $comparator);
@@ -217,10 +217,10 @@ class OperationPipe
      * Gets a comparable value through a closure or the element itself. Will throw an error for invalid types.
      *
      * @param mixed $element To be used as a parameter for the closure.
-     * @param null $comparator Closure to fetch the comparable value.
+     * @param callable $comparator Closure to fetch the comparable value.
      * @return mixed Comparable value
      */
-    private function getComparableValue($element, $comparator = null)
+    private function getComparableValue($element, callable $comparator = null)
     {
         $comparable = null;
 
@@ -246,7 +246,7 @@ class OperationPipe
      * @param $closure
      * @return mixed
      */
-    private function compare($current, $comparable, $closure)
+    private function compare($current, $comparable, callable $closure)
     {
         if ($current == null || call_user_func($closure, $current, $comparable)) {
             return $comparable;
