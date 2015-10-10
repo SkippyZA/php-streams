@@ -60,7 +60,7 @@ class Optional {
      *
      * @param $func
      */
-    public function ifPresent($func) {
+    public function ifPresent(callable $func) {
         if(!$this->isPresent())
             return;
 

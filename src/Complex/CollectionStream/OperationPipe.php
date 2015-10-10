@@ -193,7 +193,7 @@ class OperationPipe
         })->get();
     }
 
-    public function average($comparator = null)
+    public function average(callable $comparator = null)
     {
         $averageData = $this->reduce(array('total' => 0, 'count' => 0),
             function ($metrics, $element) use ($comparator) {
