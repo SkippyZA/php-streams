@@ -2,9 +2,8 @@
 
 namespace Complex\CollectionStream;
 
-use Complex\CollectionStream;
-
 use Complex\Lib\Person;
+use Complex\CollectionStream;
 
 class StreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -362,6 +361,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         foreach($evenStream->iterate() as $evenNumber) {
             $this->assertTrue($expectedArray[$iteratorCount++] === $evenNumber);
         }
+
+        $this->assertEquals(3, $iteratorCount);
     }
 
 
