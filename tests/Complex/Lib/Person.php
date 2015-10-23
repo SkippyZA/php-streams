@@ -1,6 +1,6 @@
 <?php
 
-namespace Complex\Lib; // TODO needs to be refactored
+namespace Complex\Lib;
 
 
 class Person
