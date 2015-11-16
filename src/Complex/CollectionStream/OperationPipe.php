@@ -10,6 +10,7 @@ use Complex\CollectionStream\Operation\Limit;
 use Complex\CollectionStream\Operation\Map;
 use Complex\CollectionStream\Operation\Peak;
 use Complex\CollectionStream\Operation\Operation;
+use Complex\CollectionStream\Operation\Stateful;
 use Complex\CollectionStream\Stream\ArrayStream;
 use InvalidArgumentException;
 use Iterator as StlIterator;
@@ -105,6 +106,15 @@ class OperationPipe
     public function peak(callable $function)
     {
         $this->add(new Peak($function));
+
+        return $this;
+    }
+
+    public function distinct($strict = false)
+    {
+        $this->add(new Stateful(function($obj, $i, $array) use ($strict) {
+            return !in_array($obj, $array, $strict);
+        }));
 
         return $this;
     }
