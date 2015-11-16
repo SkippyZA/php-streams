@@ -2,16 +2,29 @@
 
 namespace Complex\CollectionStream\Operation;
 
-
 class Stateful extends AbstractOperation
 {
-    private $filterCallable;
-    private $buffer;
+    private $filterCallable = null;
+    private $mergerCallable = null;
+    private $buffer = null;
     private $i = 0;
 
-    public function __construct(callable $filterCallable)
+    public function __construct(callable $filterCallable = null, callable $mergerCallable = null)
     {
+        if($filterCallable === null) {
+            $filterCallable = function($obj, $i, $buffer) {
+                return true;
+            };
+        }
+
+        if($mergerCallable === null) {
+            $mergerCallable = function($obj, &$buffer) {
+                array_push($buffer, $obj);
+            };
+        }
+
         $this->filterCallable = $filterCallable;
+        $this->mergerCallable = $mergerCallable;
     }
 
     public function advance()
@@ -48,7 +61,7 @@ class Stateful extends AbstractOperation
         }
 
         if($functionResult) {
-            array_push($this->buffer, $obj);
+            call_user_func_array($this->mergerCallable, [$obj, &$this->buffer]);
         }
 
         return $obj;
