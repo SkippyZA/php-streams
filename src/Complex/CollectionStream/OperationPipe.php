@@ -110,10 +110,10 @@ class OperationPipe
         return $this;
     }
 
-    public function distinct()
+    public function distinct($strict = false)
     {
-        $this->add(new Stateful(function($obj, $i, $array) {
-            return !in_array($obj, $array);
+        $this->add(new Stateful(function($obj, $i, $array) use ($strict) {
+            return !in_array($obj, $array, $strict);
         }));
 
         return $this;
