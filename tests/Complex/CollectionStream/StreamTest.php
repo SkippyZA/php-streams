@@ -347,6 +347,23 @@ class StreamTest extends \PHPUnit_Framework_TestCase
             });
     }
 
+    public function testIterator()
+    {
+        $expectedArray = [2, 4, 6];
+        $iteratorCount = 0;
+
+        $evenStream = Stream::from($this->data)
+            ->filter(function($d) {
+                return $d % 2 === 0;
+            });
+
+        foreach($evenStream->iterate() as $evenNumber) {
+            $this->assertTrue($expectedArray[$iteratorCount++] === $evenNumber);
+        }
+
+        $this->assertEquals(3, $iteratorCount);
+    }
+
 
     public function getAge(Person $person)
     {

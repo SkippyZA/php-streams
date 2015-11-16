@@ -209,6 +209,19 @@ class OperationPipe
         return Optional::ofNullable($averageData['total'] / $averageData['count']);
     }
 
+    /**
+     *
+     * @return \Generator
+     */
+    public function iterate()
+    {
+        $current = null;
+
+        while (($current = $this->next()) !== null) {
+            yield $current;
+        }
+    }
+
     /*
      * Helpers
      */
