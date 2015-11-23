@@ -11,7 +11,7 @@
         {
             "name": "Shaun Egan",
             "email": "shauneganza@gmail.com"
-        }g
+        }
     ],
     "require": {
         "php": ">=5.5.0"
