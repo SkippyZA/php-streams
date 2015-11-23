@@ -22,6 +22,16 @@ class Stream
     }
 
     /**
+     * Create a stream from a single item.
+     * @param $item
+     * @return OperationPipe
+     */
+    public static function just($item)
+    {
+        return new OperationPipe([$item]);
+    }
+
+    /**
      * @param int $start Start inclusive
      * @param int $end   End inclusive
      *
