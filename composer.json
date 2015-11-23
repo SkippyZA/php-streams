@@ -1,5 +1,8 @@
 {
     "name": "skippy-za/php-streams",
+    "description": "PHP streams library for functional collection manipulation with vertical processing.",
+    "keywords": [ "stream", "php-stream", "collection", "functional" ],
+    "license": "MIT",
     "authors": [
         {
             "name": "Steven Inskip",
@@ -8,7 +11,7 @@
         {
             "name": "Shaun Egan",
             "email": "shauneganza@gmail.com"
-        }
+        }g
     ],
     "require": {
         "php": ">=5.5.0"
