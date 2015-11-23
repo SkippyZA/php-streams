@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/SkippyZA/php-streams.png?label=ready&title=Ready)](https://waffle.io/SkippyZA/php-streams)
 #PHPStream
 
 ## Tests
